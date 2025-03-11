@@ -2,7 +2,6 @@
 #ifndef _Battleship_h
 #define _Battleship_h
 
-
 using namespace std;
 class Battleship
 {
@@ -17,4 +16,3 @@ public:
 };
 
 #endif _Battleship_h
-

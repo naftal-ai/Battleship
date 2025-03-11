@@ -4,8 +4,6 @@
 
 using namespace std;
 
-
-
 Game::Game(int num)
 {
 	if (num < 6 && num > 0)
@@ -24,7 +22,7 @@ Game::Game(int num)
 }
 Game::~Game()
 {
-	delete[]m_Barr;
+	delete[] m_Barr;
 }
 
 int Game::holdedSpace = 0;
@@ -36,8 +34,7 @@ void Game::clearBoard()
 			m_board[i][j] = '_';
 }
 
-
-void Game::printOriginalBoard()const
+void Game::printOriginalBoard() const
 {
 	cout << "   ";
 
@@ -56,8 +53,7 @@ void Game::printOriginalBoard()const
 	}
 }
 
-
-bool Game::checkPlace(int len, int x, int y, bool vertical)const
+bool Game::checkPlace(int len, int x, int y, bool vertical) const
 {
 	int mx, my, px, py;
 	if (vertical)
@@ -109,7 +105,8 @@ void Game::buildBoard()
 	{
 		int x, y, len = m_Barr[i].getSize();
 		bool isVertical;
-		do {
+		do
+		{
 			x = rand() % 10;
 			y = rand() % 10;
 			isVertical = (rand() % 100) % 2 == 0;
@@ -123,10 +120,9 @@ void Game::buildBoard()
 			for (int i = 0; i < len; i++)
 				m_board[y][x + i] = 's';
 	}
-	
 }
 
-void Game::printBoard()const
+void Game::printBoard() const
 {
 	cout << "   ";
 
@@ -140,14 +136,15 @@ void Game::printBoard()const
 		if (i < 9)
 			cout << " ";
 		for (int j = 0; j < N; j++)
-			cout << (m_board[i][j] == '@' || m_board[i][j] == 'x' ? m_board[i][j] : '_') << " "; //print only hits or fisfusim
+			cout << (m_board[i][j] == '@' || m_board[i][j] == 'x' ? m_board[i][j] : '_') << " "; // print only hits or fisfusim
 		cout << endl;
 	}
 }
 
 int Game::checkHit(char cx, int y)
 {
-	int x = cx - 'a'; y -= 1;
+	int x = cx - 'a';
+	y -= 1;
 	if (m_board[y][x] == '@' || m_board[y][x] == 'x')
 	{
 		cout << "you have chosen this point already.\npleas choose another one." << endl;
@@ -169,9 +166,9 @@ int Game::checkHit(char cx, int y)
 	return 1;
 }
 
-bool Game::checkSunk(int x, int y)const
+bool Game::checkSunk(int x, int y) const
 {
-		//1.find the direction of a battleship
+	// 1.find the direction of a battleship
 	bool vertical = false;
 
 	if (y != 0 && m_board[y - 1][x] == 's' || m_board[y - 1][x] == '@')
@@ -180,7 +177,7 @@ bool Game::checkSunk(int x, int y)const
 		vertical = true;
 
 	if (vertical)
-	{	//check down
+	{ // check down
 		for (int ty = y + 1; ty < N; ty++)
 		{
 			if (m_board[ty][x] == 's')
@@ -188,8 +185,8 @@ bool Game::checkSunk(int x, int y)const
 			if (m_board[ty][x] == 'x' || m_board[ty][x] == '_')
 				break;
 		}
-		
-		//check up
+
+		// check up
 
 		for (int ty = y - 1; ty > -1; ty--)
 		{
@@ -201,7 +198,7 @@ bool Game::checkSunk(int x, int y)const
 	}
 	else
 	{
-		//check right
+		// check right
 		for (int tx = x + 1; tx < N; tx++)
 		{
 			if (m_board[y][tx] == 's')
@@ -209,8 +206,8 @@ bool Game::checkSunk(int x, int y)const
 			if (m_board[y][tx] == 'x' || m_board[y][tx] == '_')
 				break;
 		}
-		
-		//check left
+
+		// check left
 		for (int tx = x - 1; tx > -1; tx--)
 		{
 			if (m_board[y][tx] == 's')
@@ -218,15 +215,14 @@ bool Game::checkSunk(int x, int y)const
 			if (m_board[y][tx] == 'x' || m_board[y][tx] == '_')
 				break;
 		}
-
 	}
 
 	return true;
 }
 
-bool Game::chekcValid(char cx, int y)const
+bool Game::chekcValid(char cx, int y) const
 {
-	if (cx > 'j' || cx < 'a' || y < 1 || y>10)
+	if (cx > 'j' || cx < 'a' || y < 1 || y > 10)
 	{
 		cout << "invalid input." << endl;
 		return false;
@@ -246,17 +242,18 @@ void Game::play()
 		printOriginalBoard();
 		cout << "memorize the board and press enter to start the game..." << endl;
 		cin.ignore();
-		while (cin.get() != '\n');
-		
+		while (cin.get() != '\n')
+			;
+
 		system("cls");
 		system("clear");
 	}
 	while (holdedSpace)
 	{
 		char cx = '0';
-		int y =0;
+		int y = 0;
 		printBoard();
-		
+
 		cout << "enter guess: x y (to exit use 0 0)" << endl;
 		cin >> cx >> y;
 		if (y == 0 && cx == '0')
@@ -265,20 +262,18 @@ void Game::play()
 			return;
 		}
 
-			while(!chekcValid(cx, y))
-			{
-				cin.clear();
-				cin.ignore();
-				cin >> cx >> y;
-			}
-				
-			if (checkHit(cx, y) != -1)
-				ctr++;
-		
+		while (!chekcValid(cx, y))
+		{
+			cin.clear();
+			cin.ignore();
+			cin >> cx >> y;
+		}
+
+		if (checkHit(cx, y) != -1)
+			ctr++;
 	}
-	
+
 	cout << "you won!!" << endl;
 	cout << "you had " << ctr << " rounds total." << endl;
 	printOriginalBoard();
-	
 }
